@@ -15,6 +15,24 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @can('crear hospedaje')
+                        <x-nav-link :href="route('dashboard')" :active="false">
+                            {{ __('Mis Hospedajes') }}
+                        </x-nav-link>
+                    @endcan
+
+                    @can('crear reserva')
+                        <x-nav-link :href="route('dashboard')" :active="false">
+                            {{ __('Mis Reservas') }}
+                        </x-nav-link>
+                    @endcan
+
+                    @role('admin')
+                        <x-nav-link :href="route('dashboard')" :active="false">
+                            {{ __('Administración') }}
+                        </x-nav-link>
+                    @endrole
                 </div>
             </div>
 
@@ -70,6 +88,24 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            @can('crear hospedaje')
+                <x-responsive-nav-link :href="route('dashboard')" :active="false">
+                    {{ __('Mis Hospedajes') }}
+                </x-responsive-nav-link>
+            @endcan
+
+            @can('crear reserva')
+                <x-responsive-nav-link :href="route('dashboard')" :active="false">
+                    {{ __('Mis Reservas') }}
+                </x-responsive-nav-link>
+            @endcan
+
+            @role('admin')
+                <x-responsive-nav-link :href="route('dashboard')" :active="false">
+                    {{ __('Administración') }}
+                </x-responsive-nav-link>
+            @endrole
         </div>
 
         <!-- Responsive Settings Options -->

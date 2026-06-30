@@ -38,7 +38,7 @@ class RolePermissionSeeder extends Seeder
             'ver hospedaje', 'crear hospedaje', 'editar hospedaje', 'eliminar hospedaje',
             'gestionar miembros',
             'ver habitacion', 'crear habitacion', 'editar habitacion', 'eliminar habitacion',
-            'confirmar reserva',
+            'confirmar reserva', 'crear reserva', 'cancelar reserva',
             'comentar',
         ]);
 
