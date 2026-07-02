@@ -2,47 +2,41 @@
 
 namespace App\Policies;
 
-use App\Models\Reserva;
+use App\Models\Hospedaje;
 use App\Models\User;
 
-class ReservaPolicy
+class HospedajePolicy
 {
     public function viewAny(User $user): bool
     {
         return true;
     }
 
-    public function view(User $user, Reserva $reserva): bool
+    public function view(User $user, Hospedaje $hospedaje): bool
     {
-        return $user->hasRole('admin')
-            || $user->hasRole('recepcionista')
-            || $reserva->user_id === $user->id
-            || $reserva->habitacion->hospedaje->owner_id === $user->id;
+        return true;
     }
 
     public function create(User $user): bool
     {
-        return $user->can('crear reserva');
+        return $user->can('crear hospedaje');
     }
 
-    public function update(User $user, Reserva $reserva): bool
+    public function update(User $user, Hospedaje $hospedaje): bool
     {
         return $user->hasRole('admin')
-            || ($user->can('editar reserva')
-                && ($user->hasRole('recepcionista') || $reserva->habitacion->hospedaje->owner_id === $user->id));
+            || ($user->can('editar hospedaje') && $hospedaje->owner_id === $user->id);
     }
 
-    public function cancel(User $user, Reserva $reserva): bool
+    public function delete(User $user, Hospedaje $hospedaje): bool
     {
         return $user->hasRole('admin')
-            || $reserva->user_id === $user->id
-            || $reserva->habitacion->hospedaje->owner_id === $user->id;
+            || ($user->can('eliminar hospedaje') && $hospedaje->owner_id === $user->id);
     }
 
-    public function confirm(User $user, Reserva $reserva): bool
+    public function gestionarMiembros(User $user, Hospedaje $hospedaje): bool
     {
         return $user->hasRole('admin')
-            || ($user->can('confirmar reserva')
-                && ($user->hasRole('recepcionista') || $reserva->habitacion->hospedaje->owner_id === $user->id));
+            || ($user->can('gestionar miembros') && $hospedaje->owner_id === $user->id);
     }
 }

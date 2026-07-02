@@ -17,19 +17,25 @@
                     </x-nav-link>
 
                     @can('crear hospedaje')
-                        <x-nav-link :href="route('dashboard')" :active="false">
+                        <x-nav-link :href="route('hospedajes.index')" :active="request()->routeIs('hospedajes.*')">
                             {{ __('Mis Hospedajes') }}
                         </x-nav-link>
                     @endcan
 
                     @can('crear reserva')
-                        <x-nav-link :href="route('dashboard')" :active="false">
+                        <x-nav-link :href="route('reservas.index')" :active="request()->routeIs('reservas.*')">
                             {{ __('Mis Reservas') }}
                         </x-nav-link>
                     @endcan
 
+                    @role('recepcionista')
+                        <x-nav-link :href="route('reservas.index')" :active="request()->routeIs('reservas.*')">
+                            {{ __('Gestionar Reservas') }}
+                        </x-nav-link>
+                    @endrole
+
                     @role('admin')
-                        <x-nav-link :href="route('dashboard')" :active="false">
+                        <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.*')">
                             {{ __('Administración') }}
                         </x-nav-link>
                     @endrole
@@ -90,19 +96,25 @@
             </x-responsive-nav-link>
 
             @can('crear hospedaje')
-                <x-responsive-nav-link :href="route('dashboard')" :active="false">
+                <x-responsive-nav-link :href="route('hospedajes.index')" :active="request()->routeIs('hospedajes.*')">
                     {{ __('Mis Hospedajes') }}
                 </x-responsive-nav-link>
             @endcan
 
             @can('crear reserva')
-                <x-responsive-nav-link :href="route('dashboard')" :active="false">
+                <x-responsive-nav-link :href="route('reservas.index')" :active="request()->routeIs('reservas.*')">
                     {{ __('Mis Reservas') }}
                 </x-responsive-nav-link>
             @endcan
 
+            @role('recepcionista')
+                <x-responsive-nav-link :href="route('reservas.index')" :active="request()->routeIs('reservas.*')">
+                    {{ __('Gestionar Reservas') }}
+                </x-responsive-nav-link>
+            @endrole
+
             @role('admin')
-                <x-responsive-nav-link :href="route('dashboard')" :active="false">
+                <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.*')">
                     {{ __('Administración') }}
                 </x-responsive-nav-link>
             @endrole

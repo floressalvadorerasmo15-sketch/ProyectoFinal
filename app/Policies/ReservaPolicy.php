@@ -4,63 +4,43 @@ namespace App\Policies;
 
 use App\Models\Reserva;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class ReservaPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
     public function view(User $user, Reserva $reserva): bool
     {
-        return false;
+        return true;
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
     public function create(User $user): bool
     {
-        return false;
+        return $user->can('crear reserva');
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
     public function update(User $user, Reserva $reserva): bool
     {
-        return false;
+        return $user->hasRole('admin')
+            || $user->hasRole('recepcionista')
+            || $reserva->user_id === $user->id
+            || $reserva->habitacion->hospedaje->owner_id === $user->id;
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
+    public function cancel(User $user, Reserva $reserva): bool
+    {
+        return $user->hasRole('admin')
+            || $reserva->user_id === $user->id
+            || $reserva->habitacion->hospedaje->owner_id === $user->id;
+    }
+
     public function delete(User $user, Reserva $reserva): bool
     {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Reserva $reserva): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Reserva $reserva): bool
-    {
-        return false;
+        return $user->hasRole('admin')
+            || $reserva->user_id === $user->id
+            || $reserva->habitacion->hospedaje->owner_id === $user->id;
     }
 }

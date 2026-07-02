@@ -55,18 +55,23 @@ class RolePermissionSeeder extends Seeder
             'comentar',
         ]);
 
-        // 3) Asignar roles a los usuarios del DemoSeeder
+        // 3) Usuarios de prueba por rol
         $propietarioDemo = User::where('email', 'propietario@potosi.test')->first();
         $propietarioDemo?->assignRole('propietario');
 
         $clienteDemo = User::where('email', 'cliente@potosi.test')->first();
         $clienteDemo?->assignRole('cliente');
 
-        // Usuario administrador de prueba
         $adminUser = User::firstOrCreate(
             ['email' => 'admin@potosi.test'],
             ['name' => 'Administrador', 'password' => Hash::make('password')]
         );
         $adminUser->assignRole('admin');
+
+        $recepcionistaUser = User::firstOrCreate(
+            ['email' => 'recepcionista@potosi.test'],
+            ['name' => 'Recepcionista Demo', 'password' => Hash::make('password')]
+        );
+        $recepcionistaUser->assignRole('recepcionista');
     }
 }
