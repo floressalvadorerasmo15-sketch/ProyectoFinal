@@ -17,6 +17,40 @@
                 </div>
             @endcan
 
+            {{-- Filtros --}}
+            <div class="bg-white shadow-sm sm:rounded-lg p-4 mb-4">
+                <form method="GET" action="{{ route('hospedajes.index') }}">
+                    <div style="display:flex; gap:12px; align-items:flex-end;">
+                        <div>
+                            <label style="font-size:13px; font-weight:600; color:#374151;">Buscar</label>
+                            <input type="text" name="buscar" value="{{ request('buscar') }}"
+                                placeholder="Nombre del hospedaje..."
+                                style="display:block; margin-top:4px; padding:8px 12px; border:1px solid #d1d5db; border-radius:6px; font-size:14px; width:250px;">
+                        </div>
+                        <div>
+                            <label style="font-size:13px; font-weight:600; color:#374151;">Estado</label>
+                            <select name="estado"
+                                style="display:block; margin-top:4px; padding:8px 12px; border:1px solid #d1d5db; border-radius:6px; font-size:14px;">
+                                <option value="">Todos</option>
+                                <option value="activo" {{ request('estado') === 'activo' ? 'selected' : '' }}>Activo</option>
+                                <option value="inactivo" {{ request('estado') === 'inactivo' ? 'selected' : '' }}>Inactivo</option>
+                                <option value="pendiente" {{ request('estado') === 'pendiente' ? 'selected' : '' }}>Pendiente</option>
+                            </select>
+                        </div>
+                        <div style="display:flex; gap:8px;">
+                            <button type="submit"
+                                style="background-color:#2563eb; color:#ffffff; padding:8px 16px; border-radius:6px; font-weight:600; border:none; cursor:pointer;">
+                                Filtrar
+                            </button>
+                            <a href="{{ route('hospedajes.index') }}"
+                                style="background-color:#6b7280; color:#ffffff; padding:8px 16px; border-radius:6px; font-weight:600; text-decoration:none;">
+                                Limpiar
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
                     <table class="min-w-full divide-y divide-gray-200">
@@ -35,13 +69,11 @@
                                     <td class="px-6 py-4 text-gray-600">{{ $hospedaje->direccion }}</td>
                                     <td class="px-6 py-4">
                                         @if($hospedaje->estado === 'activo')
-                                            <span style="background-color:#d1fae5; color:#065f46; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600;">
-                                                Activo
-                                            </span>
+                                            <span style="background-color:#d1fae5; color:#065f46; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600;">Activo</span>
+                                        @elseif($hospedaje->estado === 'inactivo')
+                                            <span style="background-color:#fee2e2; color:#991b1b; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600;">Inactivo</span>
                                         @else
-                                            <span style="background-color:#fee2e2; color:#991b1b; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600;">
-                                                {{ ucfirst($hospedaje->estado) }}
-                                            </span>
+                                            <span style="background-color:#fef3c7; color:#92400e; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600;">Pendiente</span>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4">

@@ -16,7 +16,7 @@ class UpdateReservaRequest extends FormRequest
     {
         return [
             'habitacion_id' => 'required|exists:habitaciones,id',
-            'fecha_inicio' => 'required|date|after_or_equal:today',
+            'fecha_inicio' => 'required|date',
             'fecha_fin' => 'required|date|after:fecha_inicio',
             'estado' => 'required|in:pendiente,confirmada,cancelada,finalizada',
         ];
@@ -25,7 +25,6 @@ class UpdateReservaRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'fecha_inicio.after_or_equal' => 'La fecha de inicio no puede ser en el pasado.',
             'fecha_fin.after' => 'La fecha de fin debe ser posterior a la fecha de inicio.',
         ];
     }

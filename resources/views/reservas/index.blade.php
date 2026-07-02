@@ -17,6 +17,35 @@
                 </div>
             @endcan
 
+            {{-- Filtros --}}
+            <div class="bg-white shadow-sm sm:rounded-lg p-4 mb-4">
+                <form method="GET" action="{{ route('reservas.index') }}">
+                    <div style="display:flex; gap:12px; align-items:flex-end;">
+                        <div>
+                            <label style="font-size:13px; font-weight:600; color:#374151;">Estado</label>
+                            <select name="estado"
+                                style="display:block; margin-top:4px; padding:8px 12px; border:1px solid #d1d5db; border-radius:6px; font-size:14px;">
+                                <option value="">Todos</option>
+                                <option value="pendiente" {{ request('estado') === 'pendiente' ? 'selected' : '' }}>Pendiente</option>
+                                <option value="confirmada" {{ request('estado') === 'confirmada' ? 'selected' : '' }}>Confirmada</option>
+                                <option value="cancelada" {{ request('estado') === 'cancelada' ? 'selected' : '' }}>Cancelada</option>
+                                <option value="finalizada" {{ request('estado') === 'finalizada' ? 'selected' : '' }}>Finalizada</option>
+                            </select>
+                        </div>
+                        <div style="display:flex; gap:8px;">
+                            <button type="submit"
+                                style="background-color:#2563eb; color:#ffffff; padding:8px 16px; border-radius:6px; font-weight:600; border:none; cursor:pointer;">
+                                Filtrar
+                            </button>
+                            <a href="{{ route('reservas.index') }}"
+                                style="background-color:#6b7280; color:#ffffff; padding:8px 16px; border-radius:6px; font-weight:600; text-decoration:none;">
+                                Limpiar
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
                     <table class="min-w-full divide-y divide-gray-200">
@@ -63,17 +92,17 @@
                                             @can('delete', $reserva)
                                                 @if($reserva->estado !== 'cancelada')
                                                     <form action="{{ route('reservas.destroy', $reserva) }}"
-                                                     method="POST" style="display:inline;"
-                                                    onsubmit="return confirm('¿Cancelar esta reserva?')">
-                                            @csrf
-                                            @method('DELETE')
-                                                 <button type="submit"
-                                                    style="background-color:#ef4444; color:#ffffff; padding:6px 14px; border-radius:6px; font-size:13px; font-weight:600; border:none; cursor:pointer;">
-                                                         Cancelar
-                                                </button>
-                                            </form>
-                                            @endif
-                                        @endcan
+                                                        method="POST" style="display:inline;"
+                                                        onsubmit="return confirm('¿Cancelar esta reserva?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            style="background-color:#ef4444; color:#ffffff; padding:6px 14px; border-radius:6px; font-size:13px; font-weight:600; border:none; cursor:pointer;">
+                                                            Cancelar
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            @endcan
                                         </div>
                                     </td>
                                 </tr>

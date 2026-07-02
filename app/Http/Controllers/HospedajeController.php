@@ -6,6 +6,7 @@ use App\Http\Requests\StoreHospedajeRequest;
 use App\Http\Requests\UpdateHospedajeRequest;
 use App\Models\Hospedaje;
 use App\Models\Servicio;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Attributes\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -17,12 +18,22 @@ use Illuminate\Support\Facades\Gate;
 #[Middleware('permission:eliminar hospedaje', only: ['destroy'])]
 class HospedajeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
-        $hospedajes = $user->hasRole('admin')
-            ? Hospedaje::with('owner')->latest()->paginate(10)
-            : Hospedaje::where('owner_id', $user->id)->latest()->paginate(10);
+        $query = $user->hasRole('admin')
+            ? Hospedaje::with('owner')
+            : Hospedaje::where('owner_id', $user->id);
+
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+
+        if ($request->filled('buscar')) {
+            $query->where('nombre', 'like', '%' . $request->buscar . '%');
+        }
+
+        $hospedajes = $query->latest()->paginate(10)->withQueryString();
 
         return view('hospedajes.index', compact('hospedajes'));
     }

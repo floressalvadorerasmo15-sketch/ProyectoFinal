@@ -9,28 +9,44 @@ use App\Models\Reserva;
 use Illuminate\Routing\Attributes\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
 
 #[Middleware('auth')]
 #[Middleware('permission:crear reserva', only: ['create', 'store'])]
 #[Middleware('permission:editar reserva', only: ['edit', 'update'])]
 class ReservaController extends Controller
 {
-    public function index()
-    {
-        $user = Auth::user();
-        $reservas = $user->hasRole('admin') || $user->hasRole('recepcionista')
-            ? Reserva::with(['user', 'habitacion.hospedaje'])->latest()->paginate(10)
-            : Reserva::where('user_id', $user->id)
-                ->with(['habitacion.hospedaje'])
-                ->latest()->paginate(10);
+    public function index(Request $request)
+{
+    $user = Auth::user();
+    $query = $user->hasRole('admin') || $user->hasRole('recepcionista')
+        ? Reserva::with(['user', 'habitacion' => function($q) {
+            $q->withTrashed()->with(['hospedaje' => function($q2) {
+                $q2->withTrashed();
+            }]);
+        }])
+        : Reserva::where('user_id', $user->id)->with(['habitacion' => function($q) {
+            $q->withTrashed()->with(['hospedaje' => function($q2) {
+                $q2->withTrashed();
+            }]);
+        }]);
 
-        return view('reservas.index', compact('reservas'));
+    if ($request->filled('estado')) {
+        $query->where('estado', $request->estado);
     }
 
+    $reservas = $query->latest()->paginate(10)->withQueryString();
+
+    return view('reservas.index', compact('reservas'));
+}
     public function create()
     {
-        $habitaciones = Habitacion::where('estado', 'disponible')->with('hospedaje')->get();
-        return view('reservas.create', compact('habitaciones'));
+    $habitaciones = Habitacion::where('estado', 'disponible')
+        ->with(['hospedaje' => function($q) {
+            $q->withTrashed();
+        }])
+        ->get();
+    return view('reservas.create', compact('habitaciones'));
     }
 
     public function store(StoreReservaRequest $request)

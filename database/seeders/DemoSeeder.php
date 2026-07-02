@@ -8,6 +8,7 @@ use App\Models\Hospedaje;
 use App\Models\Servicio;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DemoSeeder extends Seeder
 {
@@ -22,11 +23,13 @@ class DemoSeeder extends Seeder
         $propietario = User::factory()->create([
             'name' => 'Propietario Demo',
             'email' => 'propietario@potosi.test',
+            'password' => Hash::make('Prop2026'),
         ]);
 
         $cliente = User::factory()->create([
             'name' => 'Cliente Demo',
             'email' => 'cliente@potosi.test',
+            'password' => Hash::make('Clien2026'),
         ]);
 
         Hospedaje::factory(5)

@@ -31,17 +31,19 @@
 
                         <div class="mb-4">
                             <x-input-label for="fecha_inicio" :value="__('Fecha de Inicio')" />
-                            <x-text-input id="fecha_inicio" name="fecha_inicio" type="date"
-                                class="mt-1 block w-full"
-                                :value="old('fecha_inicio', $reserva->fecha_inicio->format('Y-m-d'))" required />
+                            <input type="date" id="fecha_inicio" name="fecha_inicio"
+                                value="{{ old('fecha_inicio', $reserva->fecha_inicio->format('Y-m-d')) }}"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                required />
                             <x-input-error :messages="$errors->get('fecha_inicio')" class="mt-2" />
                         </div>
 
                         <div class="mb-4">
                             <x-input-label for="fecha_fin" :value="__('Fecha de Fin')" />
-                            <x-text-input id="fecha_fin" name="fecha_fin" type="date"
-                                class="mt-1 block w-full"
-                                :value="old('fecha_fin', $reserva->fecha_fin->format('Y-m-d'))" required />
+                            <input type="date" id="fecha_fin" name="fecha_fin"
+                                value="{{ old('fecha_fin', $reserva->fecha_fin->format('Y-m-d')) }}"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                required />
                             <x-input-error :messages="$errors->get('fecha_fin')" class="mt-2" />
                         </div>
 
@@ -59,12 +61,13 @@
 
                         <div class="flex items-center justify-end mt-4 space-x-2">
                             <a href="{{ route('reservas.index') }}"
-                                class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded">
+                                style="background-color:#6b7280; color:#ffffff; padding:8px 16px; border-radius:6px; font-weight:600; text-decoration:none;">
                                 Cancelar
                             </a>
-                            <x-primary-button>
-                                {{ __('Actualizar') }}
-                            </x-primary-button>
+                            <button type="submit"
+                                style="background-color:#2563eb; color:#ffffff; padding:8px 16px; border-radius:6px; font-weight:600; border:none; cursor:pointer;">
+                                Actualizar
+                            </button>
                         </div>
                     </form>
                 </div>
