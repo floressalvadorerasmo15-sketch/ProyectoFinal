@@ -21,13 +21,13 @@ class DemoSeeder extends Seeder
         ])->map(fn ($nombre) => Servicio::firstOrCreate(['nombre' => $nombre]));
 
         $propietario = User::factory()->create([
-            'name' => 'Propietario Demo',
+            'name' => 'Propietario',
             'email' => 'propietario@potosi.test',
             'password' => Hash::make('Prop2026'),
         ]);
 
         $cliente = User::factory()->create([
-            'name' => 'Cliente Demo',
+            'name' => 'Cliente',
             'email' => 'cliente@potosi.test',
             'password' => Hash::make('Clien2026'),
         ]);

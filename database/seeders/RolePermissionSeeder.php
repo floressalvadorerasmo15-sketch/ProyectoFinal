@@ -64,13 +64,13 @@ class RolePermissionSeeder extends Seeder
 
         $adminUser = User::firstOrCreate(
             ['email' => 'admin@potosi.test'],
-            ['name' => 'Administrador', 'password' => Hash::make('password')]
+            ['name' => 'Administrador', 'password' => Hash::make('Admin123')]
         );
         $adminUser->assignRole('admin');
 
         $recepcionistaUser = User::firstOrCreate(
             ['email' => 'recepcionista@potosi.test'],
-            ['name' => 'Recepcionista Demo', 'password' => Hash::make('password')]
+            ['name' => 'Recepcionista', 'password' => Hash::make('Recep123')]
         );
         $recepcionistaUser->assignRole('recepcionista');
     }

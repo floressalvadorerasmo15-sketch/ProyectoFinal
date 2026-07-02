@@ -47,8 +47,8 @@ php artisan serve
 
 | Rol | Email | Contraseña |
 |---|---|---|
-| Administrador | admin@potosi.test | Admin2026$ |
-| Propietario | propietario@potosi.test | Prop2026$ |
+| Administrador | admin@potosi.test | Admin2026 |
+| Propietario | propietario@potosi.test | Prop2026 |
 | Recepcionista | recepcionista@potosi.test | Recep2026$ |
 | Cliente | cliente@potosi.test | Clien2026$ |
 
