@@ -19,25 +19,29 @@ use Illuminate\Support\Facades\Gate;
 class HospedajeController extends Controller
 {
     public function index(Request $request)
-    {
-        $user = Auth::user();
-        $query = $user->hasRole('admin')
-            ? Hospedaje::with('owner')
-            : Hospedaje::where('owner_id', $user->id);
+{
+    $user = Auth::user();
 
-        if ($request->filled('estado')) {
-            $query->where('estado', $request->estado);
-        }
-
-        if ($request->filled('buscar')) {
-            $query->where('nombre', 'like', '%' . $request->buscar . '%');
-        }
-
-        $hospedajes = $query->latest()->paginate(10)->withQueryString();
-
-        return view('hospedajes.index', compact('hospedajes'));
+    if ($user->hasRole('admin')) {
+        $query = Hospedaje::with('owner');
+    } elseif ($user->hasRole('propietario')) {
+        $query = Hospedaje::where('owner_id', $user->id);
+    } else {
+        $query = Hospedaje::where('estado', 'activo');
     }
 
+    if ($request->filled('estado')) {
+        $query->where('estado', $request->estado);
+    }
+
+    if ($request->filled('buscar')) {
+        $query->where('nombre', 'like', '%' . $request->buscar . '%');
+    }
+
+    $hospedajes = $query->latest()->paginate(10)->withQueryString();
+
+    return view('hospedajes.index', compact('hospedajes'));
+}
     public function create()
     {
         $servicios = Servicio::all();

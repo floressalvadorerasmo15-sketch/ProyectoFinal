@@ -51,10 +51,15 @@
                             <x-input-label for="estado" :value="__('Estado')" />
                             <select id="estado" name="estado"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                                <option value="pendiente" {{ old('estado', $reserva->estado) === 'pendiente' ? 'selected' : '' }}>Pendiente</option>
-                                <option value="confirmada" {{ old('estado', $reserva->estado) === 'confirmada' ? 'selected' : '' }}>Confirmada</option>
-                                <option value="cancelada" {{ old('estado', $reserva->estado) === 'cancelada' ? 'selected' : '' }}>Cancelada</option>
-                                <option value="finalizada" {{ old('estado', $reserva->estado) === 'finalizada' ? 'selected' : '' }}>Finalizada</option>
+                                @if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('recepcionista') || Auth::user()->hasRole('propietario'))
+                                    <option value="pendiente" {{ old('estado', $reserva->estado) === 'pendiente' ? 'selected' : '' }}>Pendiente</option>
+                                    <option value="confirmada" {{ old('estado', $reserva->estado) === 'confirmada' ? 'selected' : '' }}>Confirmada</option>
+                                    <option value="cancelada" {{ old('estado', $reserva->estado) === 'cancelada' ? 'selected' : '' }}>Cancelada</option>
+                                    <option value="finalizada" {{ old('estado', $reserva->estado) === 'finalizada' ? 'selected' : '' }}>Finalizada</option>
+                                @else
+                                    <option value="confirmada" {{ old('estado', $reserva->estado) === 'confirmada' ? 'selected' : '' }}>Confirmada</option>
+                                    <option value="cancelada" {{ old('estado', $reserva->estado) === 'cancelada' ? 'selected' : '' }}>Cancelada</option>
+                                @endif
                             </select>
                             <x-input-error :messages="$errors->get('estado')" class="mt-2" />
                         </div>

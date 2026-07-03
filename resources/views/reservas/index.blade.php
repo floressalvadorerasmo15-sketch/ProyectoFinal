@@ -83,13 +83,17 @@
                                                 style="background-color:#3b82f6; color:#ffffff; padding:6px 14px; border-radius:6px; font-size:13px; font-weight:600; text-decoration:none;">
                                                 Ver
                                             </a>
-                                            @can('update', $reserva)
+
+                                            {{-- Solo admin y recepcionista pueden editar --}}
+                                            @if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('recepcionista'))
                                                 <a href="{{ route('reservas.edit', $reserva) }}"
                                                     style="background-color:#f59e0b; color:#ffffff; padding:6px 14px; border-radius:6px; font-size:13px; font-weight:600; text-decoration:none;">
                                                     Editar
                                                 </a>
-                                            @endcan
-                                            @can('delete', $reserva)
+                                            @endif
+
+                                            {{-- Solo admin puede eliminar/cancelar cualquier reserva --}}
+                                            @role('admin')
                                                 @if($reserva->estado !== 'cancelada')
                                                     <form action="{{ route('reservas.destroy', $reserva) }}"
                                                         method="POST" style="display:inline;"
@@ -102,7 +106,23 @@
                                                         </button>
                                                     </form>
                                                 @endif
-                                            @endcan
+                                            @endrole
+
+                                            {{-- Cliente puede cancelar solo sus propias reservas --}}
+                                            @if(Auth::user()->hasRole('cliente') && $reserva->user_id === Auth::id())
+                                                @if($reserva->estado !== 'cancelada')
+                                                    <form action="{{ route('reservas.destroy', $reserva) }}"
+                                                        method="POST" style="display:inline;"
+                                                        onsubmit="return confirm('¿Cancelar esta reserva?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            style="background-color:#ef4444; color:#ffffff; padding:6px 14px; border-radius:6px; font-size:13px; font-weight:600; border:none; cursor:pointer;">
+                                                            Cancelar
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

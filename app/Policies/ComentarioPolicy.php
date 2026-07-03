@@ -19,16 +19,23 @@ class ComentarioPolicy
 
     public function create(User $user): bool
     {
-        return $user->can('comentar');
+        return $user->hasRole('cliente');
     }
 
     public function update(User $user, Comentario $comentario): bool
     {
-        return $user->hasRole('admin') || $comentario->user_id === $user->id;
+        return $user->hasRole('admin')
+            || $comentario->user_id === $user->id;
     }
 
     public function delete(User $user, Comentario $comentario): bool
     {
-        return $user->hasRole('admin') || $comentario->user_id === $user->id;
+        return $user->hasRole('admin');
+    }
+
+    public function responder(User $user, Comentario $comentario): bool
+    {
+        return $user->hasRole('propietario')
+            && $comentario->hospedaje->owner_id === $user->id;
     }
 }

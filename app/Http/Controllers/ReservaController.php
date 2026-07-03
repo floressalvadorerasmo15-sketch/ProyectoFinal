@@ -17,36 +17,52 @@ use Illuminate\Http\Request;
 class ReservaController extends Controller
 {
     public function index(Request $request)
-{
-    $user = Auth::user();
-    $query = $user->hasRole('admin') || $user->hasRole('recepcionista')
-        ? Reserva::with(['user', 'habitacion' => function($q) {
-            $q->withTrashed()->with(['hospedaje' => function($q2) {
-                $q2->withTrashed();
-            }]);
-        }])
-        : Reserva::where('user_id', $user->id)->with(['habitacion' => function($q) {
-            $q->withTrashed()->with(['hospedaje' => function($q2) {
-                $q2->withTrashed();
-            }]);
-        }]);
+    {
+        $user = Auth::user();
 
-    if ($request->filled('estado')) {
-        $query->where('estado', $request->estado);
+        if ($user->hasRole('admin') || $user->hasRole('recepcionista')) {
+            $query = Reserva::with(['user', 'habitacion' => function($q) {
+                $q->withTrashed()->with(['hospedaje' => function($q2) {
+                    $q2->withTrashed();
+                }]);
+            }]);
+        } elseif ($user->hasRole('propietario')) {
+            $hospedajeIds = $user->hospedajesPropios()->pluck('id');
+            $query = Reserva::with(['user', 'habitacion' => function($q) {
+                $q->withTrashed()->with(['hospedaje' => function($q2) {
+                    $q2->withTrashed();
+                }]);
+            }])->whereHas('habitacion', function($q) use ($hospedajeIds) {
+                $q->whereIn('hospedaje_id', $hospedajeIds);
+            });
+        } else {
+            $query = Reserva::where('user_id', $user->id)->with(['habitacion' => function($q) {
+                $q->withTrashed()->with(['hospedaje' => function($q2) {
+                    $q2->withTrashed();
+                }]);
+            }]);
+        }
+
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+
+        $reservas = $query->latest()->paginate(10)->withQueryString();
+
+        return view('reservas.index', compact('reservas'));
     }
 
-    $reservas = $query->latest()->paginate(10)->withQueryString();
-
-    return view('reservas.index', compact('reservas'));
-}
     public function create()
     {
-    $habitaciones = Habitacion::where('estado', 'disponible')
-        ->with(['hospedaje' => function($q) {
-            $q->withTrashed();
-        }])
-        ->get();
-    return view('reservas.create', compact('habitaciones'));
+        $habitaciones = Habitacion::where('estado', 'disponible')
+            ->whereDoesntHave('reservas', function($query) {
+                $query->whereNotIn('estado', ['cancelada']);
+            })
+            ->with(['hospedaje' => function($q) {
+                $q->withTrashed();
+            }])
+            ->get();
+        return view('reservas.create', compact('habitaciones'));
     }
 
     public function store(StoreReservaRequest $request)
@@ -73,7 +89,11 @@ class ReservaController extends Controller
     public function edit(Reserva $reserva)
     {
         Gate::authorize('update', $reserva);
-        $habitaciones = Habitacion::where('estado', 'disponible')->with('hospedaje')->get();
+        $habitaciones = Habitacion::where('estado', 'disponible')
+            ->with(['hospedaje' => function($q) {
+                $q->withTrashed();
+            }])
+            ->get();
         return view('reservas.edit', compact('reserva', 'habitaciones'));
     }
 

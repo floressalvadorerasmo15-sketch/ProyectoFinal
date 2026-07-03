@@ -32,7 +32,7 @@ DB_HOST=127.0.0.1
 DB_PORT=5432
 DB_DATABASE=potosi_imperial_stay
 DB_USERNAME=postgres
-DB_PASSWORD=tu_password
+DB_PASSWORD=info123
 ```
 
 4. Migrar y sembrar datos:
@@ -46,11 +46,10 @@ php artisan serve
 ## Credenciales de prueba
 
 | Rol | Email | Contraseña |
-|---|---|---|
-| Administrador | admin@potosi.test | Admin2026 |
+| Administrador | admin@potosi.test | Admin123 |
 | Propietario | propietario@potosi.test | Prop2026 |
-| Recepcionista | recepcionista@potosi.test | Recep2026$ |
-| Cliente | cliente@potosi.test | Clien2026$ |
+| Recepcionista | recepcionista@potosi.test | Recep123 |
+| Cliente | cliente@potosi.test | Clien2026 |
 
 ## Roles y Permisos
 
