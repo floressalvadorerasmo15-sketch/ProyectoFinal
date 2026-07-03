@@ -14,18 +14,17 @@ COPY --from=node:20 /usr/local /usr/local
 
 WORKDIR /app
 
-# Copiar TODO el proyecto primero
 COPY . .
 
-# Instalar dependencias PHP
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
-# Instalar dependencias Node
 RUN npm ci
 
-# Compilar Vite
 RUN npm run build
+
+RUN php artisan config:clear || true
+RUN php artisan cache:clear || true
 
 EXPOSE 8080
 
-CMD php artisan serve --host=0.0.0.0 --host=0.0.0.0 --port=${PORT:-8080}
+CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8080}
