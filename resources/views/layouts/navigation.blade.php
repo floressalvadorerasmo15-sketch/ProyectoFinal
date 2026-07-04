@@ -33,10 +33,13 @@
                     @endrole
 
                     @role('recepcionista')
-                        <x-nav-link :href="route('reservas.index')" :active="request()->routeIs('reservas.*')">
-                            {{ __('Gestionar Reservas') }}
-                        </x-nav-link>
-                    @endrole
+    <x-nav-link :href="route('hospedajes.index')" :active="request()->routeIs('hospedajes.*')">
+        {{ __('Hospedajes') }}
+    </x-nav-link>
+    <x-nav-link :href="route('reservas.index')" :active="request()->routeIs('reservas.*')">
+        {{ __('Gestionar Reservas') }}
+    </x-nav-link>
+@endrole
 
                     @role('admin')
                         <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.*')">
@@ -116,10 +119,13 @@
             @endrole
 
             @role('recepcionista')
-                <x-responsive-nav-link :href="route('reservas.index')" :active="request()->routeIs('reservas.*')">
-                    {{ __('Gestionar Reservas') }}
-                </x-responsive-nav-link>
-            @endrole
+    <x-responsive-nav-link :href="route('hospedajes.index')" :active="request()->routeIs('hospedajes.*')">
+        {{ __('Hospedajes') }}
+    </x-responsive-nav-link>
+    <x-responsive-nav-link :href="route('reservas.index')" :active="request()->routeIs('reservas.*')">
+        {{ __('Gestionar Reservas') }}
+    </x-responsive-nav-link>
+@endrole
 
             @role('admin')
                 <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.*')">

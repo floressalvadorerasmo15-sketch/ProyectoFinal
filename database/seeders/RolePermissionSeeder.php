@@ -43,10 +43,11 @@ class RolePermissionSeeder extends Seeder
         ]);
 
         $recepcionista = Role::firstOrCreate(['name' => 'recepcionista']);
-        $recepcionista->syncPermissions([
-            'ver hospedaje', 'ver habitacion',
-            'confirmar reserva', 'editar reserva',
-        ]);
+$recepcionista->syncPermissions([
+    'ver hospedaje', 'ver habitacion',
+    'confirmar reserva', 'editar reserva',
+    'crear reserva', 'cancelar reserva',
+]);
 
         $cliente = Role::firstOrCreate(['name' => 'cliente']);
         $cliente->syncPermissions([
